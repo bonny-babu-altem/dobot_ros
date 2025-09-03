@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/xacro">
+    <ros2_control name="dobot_cr5s" type="system">
+        <hardware>
+            <plugin>dobot_cr5s_hardware::DobotCR5SSystem</plugin>
+            <param name="robot_ip">192.168.0.116</param>
+            <param name="dashboard_port">29999</param>
+            <param name="feedback_port">30005</param>
+            <param name="a_ratio">20.0</param>
+            <param name="v_ratio">50.0</param>
+            <param name="send_threshold_deg">1.0</param>
+        </hardware>
+
+        <joint name="joint_1">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_2">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_3">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_4">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_5">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_6">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+    </ros2_control>
+</robot>

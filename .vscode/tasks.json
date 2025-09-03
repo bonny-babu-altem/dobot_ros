@@ -64,10 +64,10 @@
         },
         // CUSTOM TASKS
         {
-            "label": "cr5_description: Launch cr5_simulation",
+            "label": "cr5_description: Launch cr5s_bringup",
             "type": "shell",
             "linux": {
-                "command": "source ./install/setup.bash && ros2 launch cr5_description cr5_simulation.launch.py"
+                "command": "source ./install/setup.bash && ros2 launch cr5_description cr5s_bringup.launch.py use_sim_time:=false"
             },
             "options": {
                 "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/"

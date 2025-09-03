@@ -1,0 +1,37 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 200
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints: [joint_1, joint_2, joint_3, joint_4, joint_5, joint_6]
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    allow_partial_joints_goal: false
+    constraints:
+      goal_time: 2.0
+      stopped_velocity_tolerance: 0.01
+      j1: {trajectory: 0.1, goal: 0.05}
+      j2: {trajectory: 0.1, goal: 0.05}
+      j3: {trajectory: 0.1, goal: 0.05}
+      j4: {trajectory: 0.1, goal: 0.05}
+      j5: {trajectory: 0.1, goal: 0.05}
+      j6: {trajectory: 0.1, goal: 0.05}
+
+robot:
+  ros__parameters:
+    # hardware plugin config (consumed by on_init)
+    hardware:
+      plugin: "dobot_cr5s_hardware::DobotCR5SSystem"
+      robot_ip: "192.168.0.116"
+      dashboard_port: 29999
+      feedback_port: 30005
+      a_ratio: 20.0
+      v_ratio: 50.0
+      send_threshold_deg: 1.0

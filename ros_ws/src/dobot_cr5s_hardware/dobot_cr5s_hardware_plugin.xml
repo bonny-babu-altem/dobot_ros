@@ -1,0 +1,5 @@
+<library path="dobot_cr5s_hardware">
+  <class name="dobot_cr5s_hardware::DobotCR5SSystem" type="dobot_cr5s_hardware::DobotCR5SSystem" base_class_type="hardware_interface::SystemInterface">
+    <description>Dobot CR5S ros2_control hardware plugin</description>
+  </class>
+</library>

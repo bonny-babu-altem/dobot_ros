@@ -4,6 +4,7 @@
 
     <!-- Include common utility macros -->
     <xacro:include filename="$(find cr5_description)/urdf/utils.xacro" />
+    <xacro:include filename="$(find cr5_description)/urdf/ros2control.xacro" />
 
     <!-- Define common properties -->
     <xacro:property name="mesh_path" value="package://cr5_description/meshes" />
@@ -37,7 +38,7 @@
         <parent link="base_link" />
         <child link="Link1" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.14" upper="3.14" effort="0" velocity="0" />
+        <limit lower="-3.14" upper="3.14" effort="100" velocity="1.0" />
     </joint>
 
     <!-- Link2 -->
@@ -52,7 +53,7 @@
         <parent link="Link1" />
         <child link="Link2" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.14" upper="3.14" effort="0" velocity="0" />
+        <limit lower="-3.14" upper="3.14" effort="100" velocity="1.0" />
     </joint>
 
     <!-- Link3 -->
@@ -67,7 +68,7 @@
         <parent link="Link2" />
         <child link="Link3" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.86" upper="2.86" effort="0" velocity="0" />
+        <limit lower="-2.86" upper="2.86" effort="100" velocity="1.0" />
     </joint>
 
     <!-- Link4 -->
@@ -82,7 +83,7 @@
         <parent link="Link3" />
         <child link="Link4" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.14" upper="3.14" effort="0" velocity="0" />
+        <limit lower="-3.14" upper="3.14" effort="100" velocity="1.0" />
     </joint>
 
     <!-- Link5 -->
@@ -97,7 +98,7 @@
         <parent link="Link4" />
         <child link="Link5" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.14" upper="3.14" effort="0" velocity="0" />
+        <limit lower="-3.14" upper="3.14" effort="100" velocity="1.0" />
     </joint>
 
     <!-- Link6 -->
@@ -112,7 +113,7 @@
         <parent link="Link5" />
         <child link="Link6" />
         <axis xyz="0 0 1" />
-        <limit lower="-6.28" upper="6.28" effort="0" velocity="0" />
+        <limit lower="-6.28" upper="6.28" effort="100" velocity="1.0" />
     </joint>
 
     <!-- GRIPPERS -->
