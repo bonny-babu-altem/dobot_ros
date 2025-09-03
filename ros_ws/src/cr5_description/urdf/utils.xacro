@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/xacro">
+
+    <xacro:property name="scale_for_web" value="false" />
+    <xacro:property name="mesh_scale" value="${'0.001 0.001 0.001' if scale_for_web else '1 1 1'}" />
+
+    <!-- Macro for inertial properties -->
+    <xacro:macro name="default_inertial" params="mass ixx ixy ixz iyy iyz izz xyz rpy">
+        <inertial>
+            <origin xyz="${xyz}" rpy="${rpy}" />
+            <mass value="${mass}" />
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+        </inertial>
+    </xacro:macro>
+
+    <!-- Macro for visual properties -->
+    <xacro:macro name="default_visual" params="mesh_filename material_rgba">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="${mesh_filename}" scale="${mesh_scale}"/>
+            </geometry>
+            <material name="">
+                <color rgba="${material_rgba}" />
+            </material>
+        </visual>
+    </xacro:macro>
+
+    <!-- Macro for collision properties -->
+    <xacro:macro name="default_collision" params="mesh_filename">
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="${mesh_filename}" scale="${mesh_scale}"/>
+            </geometry>
+        </collision>
+    </xacro:macro>
+
+</robot>

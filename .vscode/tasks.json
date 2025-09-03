@@ -1,0 +1,139 @@
+{
+    // sudo apt install python3-colcon-clean
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Colcon: Build",
+            "type": "shell",
+            "command": "colcon build",
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}"
+            }
+        },
+        {
+            "label": "Colcon: Clean",
+            "type": "shell",
+            "command": "colcon clean workspace -y",
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}"
+            }
+        },
+        {
+            "label": "Colcon: build [Symlink]",
+            "type": "shell",
+            "command": "colcon build --symlink-install",
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}"
+            }
+        },
+        {
+            "label": "Colcon: Build Pkg",
+            "type": "shell",
+            "linux": {
+                "command": "colcon build --packages-select ${input:ros_pkg_name}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ROS: Create Package",
+            "type": "shell",
+            "linux": {
+                "command": "ros2 pkg create ${input:ros_pkg_name} --dependencies ${input:ros_pkg_dep} --build-type ${input:ros_build_type} --license ${input:ros_pkg_lic} --maintainer-name bonnybk --maintainer-email bonnybabukachappilly@gmail.com"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/src"
+            },
+            "problemMatcher": []
+        },
+        // GROUP TASKS
+        {
+            "label": "Colcon: Clean & Build",
+            "dependsOn": [
+                "Colcon: Clean",
+                "Colcon: Build",
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        // CUSTOM TASKS
+        {
+            "label": "cr5_description: Launch cr5_simulation",
+            "type": "shell",
+            "linux": {
+                "command": "source ./install/setup.bash && ros2 launch cr5_description cr5_simulation.launch.py"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "cr5_robot_status_publisher: Run Robot Status",
+            "type": "shell",
+            "linux": {
+                "command": "source ./install/setup.bash && ros2 run cr5_robot_status_publisher robot_status"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "cr5_joint_state_publisher: Run Robot JSP",
+            "type": "shell",
+            "linux": {
+                "command": "source ./install/setup.bash && ros2 run cr5_joint_state_publisher jsp"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "JSP: GUI",
+            "type": "shell",
+            "linux": {
+                "command": "source ./install/setup.bash && ros2 run joint_state_publisher_gui  joint_state_publisher_gui"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/${config:ROSWorkspaceFolder}/"
+            },
+            "problemMatcher": []
+        },
+    ],
+    "inputs": [
+        {
+            "id": "ros_build_type",
+            "type": "promptString",
+            "description": "ROS build type",
+            "default": "ament_python"
+            // ament_cmake ament_python
+        },
+        {
+            "id": "ros_pkg_name",
+            "type": "promptString",
+            "description": "ROS package name"
+        },
+        {
+            "id": "ros_pkg_dep",
+            "type": "promptString",
+            "description": "ROS package dependencies"
+        },
+        {
+            "id": "ros_pkg_lic",
+            "type": "promptString",
+            "description": "ROS package license",
+            "default": "GPL-3.0-only"
+            // Apache-2.0, BSL-1.0, BSD-2.0, BSD-2-Clause,
+            // BSD-3-Clause, GPL-3.0-only,
+            // LGPL-3.0-only, MIT, MIT-0
+        },
+    ]
+}
