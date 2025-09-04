@@ -1,0 +1,4 @@
+clear && source Projects/dobot_ros/ros_ws/install/setup.bash && ros2 launch cr5_description robot_state.launch.py
+clear && source Projects/dobot_ros/ros_ws/install/setup.bash && ros2 launch dobot_cr5s_hardware ros2_control.launch.py
+clear && source Projects/dobot_ros/ros_ws/install/setup.bash && ros2 launch cr5_moveit_control move_group.launch.py
+clear && source Projects/dobot_ros/ros_ws/install/setup.bash && ros2 launch cr5_moveit_control moveit_rviz.launch.py
