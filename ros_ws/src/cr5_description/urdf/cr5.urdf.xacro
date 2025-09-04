@@ -118,18 +118,18 @@
 
     <!-- GRIPPERS -->
 
-    <!-- <link name="cr5_gripper_link">
-        <xacro:default_visual mesh_filename="${mesh_path}/g_body.dae" material_rgba="${default_material_rgba}" />
-        <xacro:default_collision mesh_filename="${mesh_path}/g_body.dae" />
+    <link name="cr5_gripper_link">
+        <xacro:default_visual mesh_filename="${mesh_path}/gripper.dae" material_rgba="${default_material_rgba}" />
+        <xacro:default_collision mesh_filename="${mesh_path}/gripper.dae" />
     </link>
 
     <joint name="cr5_gripper_joint" type="fixed">
-        <origin xyz="0 0 -0.002" rpy="0 0 0" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <parent link="Link6" />
         <child link="cr5_gripper_link" />
     </joint>
 
-    <link name="cr5_gripper_left">
+    <!-- <link name="cr5_gripper_left">
         <xacro:default_inertial xyz="5.0777E-11 9.3774E-05 -0.019285" rpy="0 0 0" mass="0.15789" ixx="7.8045E-05" ixy="6.1582E-15" ixz="6.2471E-14" iyy="7.9168E-05" iyz="-1.3822E-07" izz="0.00012951" />
         <xacro:default_visual mesh_filename="${mesh_path}/g_left.dae" material_rgba="${default_material_rgba}" />
         <xacro:default_collision mesh_filename="${mesh_path}/g_left.dae" />

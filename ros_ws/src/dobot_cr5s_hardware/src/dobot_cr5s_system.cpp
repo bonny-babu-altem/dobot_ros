@@ -10,6 +10,9 @@
 #include <unistd.h>
 #include <cmath>
 
+#define HW_IF_POSITION "position"
+#define HW_IF_VELOCITY "velocity"
+
 using hardware_interface::CallbackReturn;
 using hardware_interface::CommandInterface;
 using hardware_interface::return_type;
@@ -31,15 +34,15 @@ namespace dobot_cr5s_hardware
     }
 
     CallbackReturn DobotCR5SSystem::on_init(
-        const hardware_interface::HardwareComponentInterfaceParams &params)
+        const hardware_interface::HardwareInfo &info)
     {
-        if (SystemInterface::on_init(params) != CallbackReturn::SUCCESS)
+        if (SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
             return CallbackReturn::ERROR;
 
         auto getp = [&](const std::string &key, const std::string &def = "")
         {
-            auto it = params.hardware_info.hardware_parameters.find(key);
-            return (it == params.hardware_info.hardware_parameters.end()) ? def : it->second;
+            auto it = info.hardware_parameters.find(key);
+            return (it == info.hardware_parameters.end()) ? def : it->second;
         };
 
         robot_ip_ = getp("robot_ip", robot_ip_);
@@ -55,7 +58,7 @@ namespace dobot_cr5s_hardware
             send_threshold_rad_ = std::stod(s) * M_PI / 180.0;
 
         joint_names_.clear();
-        for (const auto &j : params.hardware_info.joints)
+        for (const auto &j : info.joints)
         {
             if (j.name == "unconfigured")
                 continue;
@@ -72,6 +75,8 @@ namespace dobot_cr5s_hardware
         cmd_.fill(0.0);
         last_sent_.fill(1e9);
 
+        last_pos_.fill(0.0);
+
         return CallbackReturn::SUCCESS;
     }
 
@@ -80,8 +85,8 @@ namespace dobot_cr5s_hardware
         std::vector<StateInterface> st;
         for (size_t i = 0; i < joint_names_.size(); ++i)
         {
-            st.emplace_back(joint_names_[i], hardware_interface::HW_IF_POSITION, &pos_[i]);
-            st.emplace_back(joint_names_[i], hardware_interface::HW_IF_VELOCITY, &vel_[i]);
+            st.emplace_back(joint_names_[i], HW_IF_POSITION, &pos_[i]);
+            st.emplace_back(joint_names_[i], HW_IF_VELOCITY, &vel_[i]);
         }
         return st;
     }
@@ -91,7 +96,7 @@ namespace dobot_cr5s_hardware
         std::vector<CommandInterface> cmd;
         for (size_t i = 0; i < joint_names_.size(); ++i)
         {
-            cmd.emplace_back(joint_names_[i], hardware_interface::HW_IF_POSITION, &cmd_[i]);
+            cmd.emplace_back(joint_names_[i], HW_IF_POSITION, &cmd_[i]);
         }
         return cmd;
     }
@@ -260,6 +265,7 @@ namespace dobot_cr5s_hardware
             double qact[6];
             std::memcpy(qact, buf.data() + QACTUAL_OFFSET, QACTUAL_LEN);
 
+            std::lock_guard<std::mutex> lock(fb_mutex_);
             for (int i = 0; i < 6; ++i)
             {
                 pos_[i] = deg2rad(qact[i]);
@@ -267,8 +273,24 @@ namespace dobot_cr5s_hardware
         }
     }
 
-    return_type DobotCR5SSystem::read(const rclcpp::Time &, const rclcpp::Duration &)
+    return_type DobotCR5SSystem::read(const rclcpp::Time & /*time*/, const rclcpp::Duration &period)
     {
+        // period in seconds
+        double dt = period.seconds();
+        if (dt <= 0.0)
+            dt = 0.001; // prevent division by zero
+
+        // Compute velocities using numerical differentiation
+        std::lock_guard<std::mutex> lock(fb_mutex_);
+        for (size_t i = 0; i < 6; ++i)
+        {
+            // vel = (current_pos - last_pos) / dt
+            vel_[i] = (pos_[i] - last_pos_[i]) / dt;
+
+            // save current position for next cycle
+        }
+        last_pos_ = pos_;
+
         return return_type::OK;
     }
 

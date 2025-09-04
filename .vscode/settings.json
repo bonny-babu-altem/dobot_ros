@@ -1,3 +1,4 @@
 {
     "ROSWorkspaceFolder": "ros_ws",
+    "cmake.ignoreCMakeListsMissing": true,
 }
